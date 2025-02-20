@@ -13,5 +13,4 @@
         <url-pattern>/myServlet</url-pattern>
     </servlet-mapping>
 
-
 </web-app>

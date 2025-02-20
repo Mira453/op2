@@ -15,17 +15,42 @@ public class myServlet extends HttpServlet {
             throws ServletException, IOException  {
         response.setContentType("text/html; charset=utf-8");
         request.setCharacterEncoding("UTF-8");
-        String firstNumber = request.getParameter("firstNumber");
-        String secondNumber = request.getParameter("secondNumber");
+        String a = request.getParameter("a");
+        String b = request.getParameter("b");
+        String c = request.getParameter("c");
+        String d = request.getParameter("d");
         PrintWriter out = response.getWriter();
-        if(firstNumber.isEmpty() || secondNumber.isEmpty() ){
-           out.println("<p>Ви передали порожній параметр</p>");
+
+        String regex = "^-?[0-9]+(\\.[0-9]+)?$";//числа тільки через точку
+        if(a.matches(regex) != true  ||  b.matches(regex) != true  || c.matches(regex) != true   || d.matches(regex) != true  ){
+            out.println("<p>це не число</p>");
+            out.close();
+            return;
+        }
+        double aNum = Double.parseDouble(a);
+        double bNum = Double.parseDouble(b);
+        double cNum = Double.parseDouble(c);
+        double dNum = Double.parseDouble(d);
+
+        if (Math.abs(Math.tan(aNum)) > 1e6) {
+            out.println("<p>близьке значення до розриву функції тангенса</p>");
+            out.close();
+            return;
+        }
+        if (bNum > 1 || bNum < -1){
+            out.println("<p>b має бути в межах від -1 до 1 </p>");
             out.close();
             return;
         }
 
-        int sum = Integer.parseInt(firstNumber) + Integer.parseInt(secondNumber);
-        out.println("<p>"+"Результат :" +" "+sum+"</p>");
+        //завдання 15 з лр2 першого семестру
+        double y = 2 * Math.sqrt(Math.tan(aNum) / Math.abs(Math.acos(bNum)))
+                - 3 * Math.cbrt(Math.exp(cNum - aNum) * Math.sinh(dNum));
+        if(Double.isNaN(y) ){
+            throw new IllegalArgumentException("помилка. NaN");
+        }
+        out.println("<p>"+"значення y = " +" "+y+"</p>");
         out.close();
+
     }
 }
